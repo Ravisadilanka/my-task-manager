@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Menu } from "antd";
+import { Breadcrumb, Layout, Menu } from "antd";
 import { HomeOutlined, FileAddOutlined } from "@ant-design/icons";
 import "antd/dist/reset.css";
 import Link from "next/link";
@@ -47,6 +47,17 @@ const LayoutComponent: React.FC<{ children: React.ReactNode }> = ({
           </Menu.Item>
         </Menu>
       </Header>
+
+      {/* Breadcrumb */}
+      <Breadcrumb style={{ margin: "16px 32px" }}>
+        <Breadcrumb.Item>
+          <Link href="/">Home</Link>
+        </Breadcrumb.Item>
+        {router.pathname === "/add-task" && (
+          <Breadcrumb.Item>Add Task</Breadcrumb.Item>
+        )}
+      </Breadcrumb>
+
       <Content style={{ padding: "0 50px", height: "100vh" }}>
         <div className="site-layout-content">{children}</div>
       </Content>

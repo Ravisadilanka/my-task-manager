@@ -2,6 +2,7 @@ import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import { Button, Typography } from "antd";
 import LayoutComponent from "@/components/Layout";
+import TaskList from "@/components/TaskList";
 
 const { Title } = Typography;
 
@@ -15,8 +16,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main style={{justifyContent: "center", textAlign:'center'}}>
-        <Title>Task List</Title>
-        <Button>+</Button>
+        <Title>Tasks List</Title>
+        <TaskList />
       </main>
     </LayoutComponent>
   );
