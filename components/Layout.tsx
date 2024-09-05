@@ -12,18 +12,26 @@ const { Header, Content } = Layout;
 const LayoutComponent: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const router = useRouter();
 
-  const router = useRouter()
-
-  const selectedKey = router.pathname === "/" ? "1" : "2"
+  const selectedKey = router.pathname === "/" ? "1" : "2";
 
   return (
     <Layout>
-      <Header className="header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <Header
+        className="header"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <div className="logo">
-          <Title level={3} style={{ color: "white", margin: 0 }}>
-            My Task Manager
-          </Title>
+          <Link href="/">
+            <Title level={3} style={{ color: "white", margin: 0 }}>
+              My Task Manager
+            </Title>
+          </Link>
         </div>
         <Menu
           theme="dark"
