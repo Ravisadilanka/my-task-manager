@@ -31,25 +31,25 @@ const TaskForm: React.FC = () => {
         <Input style={{textAlign:'center'}}/>
       </Form.Item>
       <Form.Item label="Category">
-        <Select style={{justifyContent:"left"}}>
-          <Select.Option value="category01">Category 01</Select.Option>
-          <Select.Option value="category02">Category 02</Select.Option>
-          <Select.Option value="category03">Category 03</Select.Option>
+        <Select>
+          <Select.Option value="Category 01">Category 01</Select.Option>
+          <Select.Option value="Category 02">Category 02</Select.Option>
+          <Select.Option value="Category 03">Category 03</Select.Option>
         </Select>
       </Form.Item>
       <Form.Item label="Priority Level">
         <Cascader
           options={[
             {
-              value: 'high',
+              value: 'High',
               label: <span style={{ color: 'red' }}>High</span>,
             },
             {
-              value: 'normal',
+              value: 'Normal',
               label: <span style={{ color: 'green' }}>Normal</span>,
             },
             {
-              value: 'low',
+              value: 'Low',
               label: <span style={{ color: 'blue' }}>Low</span>,
             },
           ]}
