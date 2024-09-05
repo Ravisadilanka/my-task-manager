@@ -29,7 +29,21 @@ const columns: TableProps<DataType>['columns'] = [
       key: "priority",
       render: (text) => (
         <span style={{color: text === 'High' ? 'red' : text === 'Normal' ? 'green' : 'blue'}}>{text}</span>
-      )
+      ),
+      showSorterTooltip: { target: 'full-header' },
+    filters: [
+      {
+        text: 'High',
+        value: 'High',
+      },
+      {
+        text: 'Normal',
+        value: 'Normal',
+      },
+      {
+        text: 'Low',
+        value: 'Low',
+      }]
   },
   {
     title: "Date",
