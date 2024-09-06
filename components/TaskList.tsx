@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, Space, Table } from 'antd';
+import React, { useState } from 'react';
+import { Button, Form, Input, Modal, Select, Space, Table } from 'antd';
 import type { TableProps } from 'antd';
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 
@@ -18,9 +18,34 @@ interface TaskListProps {
 
 const TaskList: React.FC<TaskListProps> = ({ tasks, setTasks }) => {
 
+  const [isEditing, setIsEditing] = useState(false);
+    const [editingTask, setEditingTask] = useState<DataType | null>(null);
+    const [form] = Form.useForm();
+
+    const editTask = (task: DataType) => {
+      setIsEditing(true)
+      setEditingTask(task)
+      form.setFieldsValue({
+        task: task.task,
+        category: task.category,
+        priority: task.priority
+      })
+    }
+
+    const saveEdit = () =>{
+      form.validateFields().then((values) => {
+        const updatedTasks = tasks.map((task) => 
+          task.key === editingTask?.key ? { ...task, ...values } : task
+        )
+        setTasks(updatedTasks)
+        setIsEditing(false)
+        setEditingTask(null)
+      })
+    }
   const deleteTask = (key: string) => {
     const updatedTasks = tasks.filter(task => task.key !== key);
     setTasks(updatedTasks);
+
   }
 
   const columns: TableProps<DataType>['columns'] = [
@@ -70,7 +95,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, setTasks }) => {
       key: "actions",
       render: (_, record: DataType) => (
         <Space size="middle">
-          <Button>
+          <Button onClick={() => editTask(record)}>
             <EditTwoTone />
           </Button>
           <Button danger onClick={() => deleteTask(record.key)}>
@@ -81,7 +106,47 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, setTasks }) => {
     },
   ];
 
-  return <Table columns={columns} dataSource={tasks} rowKey="key" />;
+  return (
+    <>
+   <>
+      <Table columns={columns} dataSource={tasks} rowKey="key" />
+      <Modal
+        title="Edit Task"
+        visible={isEditing}
+        onCancel={() => setIsEditing(false)}
+        onOk={saveEdit}
+        okText="Save"
+        cancelText="Cancel"
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item label="Task" name="task" rules={[{ required: true, message: 'Please input the task!' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="Category" name="category" rules={[{ required: true, message: 'Please select a category!' }]}>
+            <Select>
+              <Select.Option value="Category 01">Category 01</Select.Option>
+              <Select.Option value="Category 02">Category 02</Select.Option>
+              <Select.Option value="Category 03">Category 03</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="Priority" name="priority" rules={[{ required: true, message: 'Please select a priority!' }]}>
+            <Select>
+              <Select.Option value="High">
+                <span style={{ color: 'red' }}>High</span>
+              </Select.Option>
+              <Select.Option value="Normal">
+                <span style={{ color: 'green' }}>Normal</span>
+              </Select.Option>
+              <Select.Option value="Low">
+                <span style={{ color: 'blue' }}>Low</span>
+              </Select.Option>
+            </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
+    </>
+    </>
+)
 };
 
 export default TaskList;
