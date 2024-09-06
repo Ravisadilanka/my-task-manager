@@ -1,43 +1,64 @@
-import React, { useState } from 'react';
-import {
-  Button,
-  Cascader,
-  DatePicker,
-  Form,
-  Input,
-  Select,
-} from 'antd';
+import React, { useState } from "react";
+import { Form, Input, Select, Cascader, DatePicker, Button, message } from "antd";
 
-type SizeType = Parameters<typeof Form>[0]['size'];
+interface Task {
+  key: string;
+  task: string;
+  category: string;
+  priority: string;
+  date: string;
+}
 
-const TaskForm: React.FC = () => {
-  const [componentSize, setComponentSize] = useState<SizeType | 'default'>('default');
+interface TaskFormProps {
+  onAddTask: (task: Task) => void;
+}
 
-  const onFormLayoutChange = ({ size }: { size: SizeType }) => {
+const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
+  const [componentSize, setComponentSize] = useState<'default' | 'small' | 'large'>('default');
+
+  const onFormLayoutChange = ({ size }: { size: 'default' | 'small' | 'large' }) => {
     setComponentSize(size);
+  };
+
+  const onFinish = (values: any) => {
+    const { task, category, priority, date } = values;
+    const formattedDate = date.format('YYYY-MM-DD');
+    
+    // Generate unique key for each task
+    const newTask: Task = { 
+      key: Date.now().toString(),
+      task, 
+      category, 
+      priority, 
+      date: formattedDate 
+    };
+    
+    onAddTask(newTask);  // Pass new task to the parent component
+    message.success('Task added successfully!');
   };
 
   return (
     <Form
-      labelCol={{ span: 7}}
-      wrapperCol={{ span: 14}}
+      labelCol={{ span: 7 }}
+      wrapperCol={{ span: 14 }}
       layout="horizontal"
       initialValues={{ size: componentSize }}
       onValuesChange={onFormLayoutChange}
-      size={componentSize as SizeType}
-      style={{ maxWidth: 1200, margin: 0}}
+      size={componentSize}
+      style={{ maxWidth: 1200, margin: 0 }}
+      onFinish={onFinish}
     >
-      <Form.Item label="Task">
-        <Input style={{textAlign:'center'}}/>
+      <Form.Item label="Task" name="task" rules={[{ required: true, message: 'Please input your task!' }]}>
+        <Input style={{ textAlign: 'center' }} />
       </Form.Item>
-      <Form.Item label="Category">
+      <Form.Item label="Category" name="category" rules={[{ required: true, message: 'Please select a category!' }]}>
         <Select>
           <Select.Option value="Category 01">Category 01</Select.Option>
           <Select.Option value="Category 02">Category 02</Select.Option>
           <Select.Option value="Category 03">Category 03</Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item label="Priority Level">
+      <Form.Item label="Priority Level" name="priority" rules={[{ required: true, message: 'Please select a priority!' }]}>
         <Cascader
           options={[
             {
@@ -55,11 +76,13 @@ const TaskForm: React.FC = () => {
           ]}
         />
       </Form.Item>
-      <Form.Item label="Date">
+      <Form.Item label="Date" name="date" rules={[{ required: true, message: 'Please select a date!' }]}>
         <DatePicker />
       </Form.Item>
       <Form.Item>
-        <Button type="primary">Submit</Button>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
       </Form.Item>
     </Form>
   );

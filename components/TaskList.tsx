@@ -13,9 +13,16 @@ interface DataType {
 
 interface TaskListProps {
   tasks: DataType[];
+  setTasks: React.Dispatch<React.SetStateAction<DataType[]>>;
 }
 
-const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
+const TaskList: React.FC<TaskListProps> = ({ tasks, setTasks }) => {
+
+  const deleteTask = (key: string) => {
+    const updatedTasks = tasks.filter(task => task.key !== key);
+    setTasks(updatedTasks);
+  }
+
   const columns: TableProps<DataType>['columns'] = [
     {
       title: 'Task',
@@ -32,14 +39,11 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
       title: "Priority",
       dataIndex: "priority",
       key: "priority",
-      render: (text: string) => {
-        console.log(text); // Check what value is being passed
-        return (
-          <span style={{ color: text == 'High' ? 'red' : text == 'Normal' ? 'green' : 'blue' }}>
-            {text}
-          </span>
-        );
-      },
+      render: (text: string) => (
+        <span style={{ color: text === 'High' ? 'red' : text === 'Normal' ? 'green' : 'blue' }}>
+          {text}
+        </span>
+      ),
       filters: [
         {
           text: 'High',
@@ -54,7 +58,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
           value: 'Low',
         },
       ],
-      onFilter: (value, record) => record.priority.includes(value as string),
+      onFilter: (value: string, record: DataType) => record.priority.includes(value),
     },
     {
       title: "Date",
@@ -64,12 +68,12 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
     {
       title: "Actions",
       key: "actions",
-      render: (_, record) => (
+      render: (_, record: DataType) => (
         <Space size="middle">
           <Button>
             <EditTwoTone />
           </Button>
-          <Button danger>
+          <Button danger onClick={() => deleteTask(record.key)}>
             <DeleteTwoTone twoToneColor="red" />
           </Button>
         </Space>
@@ -77,12 +81,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
     },
   ];
 
-  const dataWithKeys = tasks.map((task, index) => ({
-    ...task,
-    key: index.toString(),
-  }));
-
-  return <Table columns={columns} dataSource={dataWithKeys} />;
+  return <Table columns={columns} dataSource={tasks} rowKey="key" />;
 };
 
 export default TaskList;
