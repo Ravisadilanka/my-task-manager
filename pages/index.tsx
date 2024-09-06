@@ -2,7 +2,7 @@ import Head from "next/head";
 import { Typography } from "antd";
 import LayoutComponent from "@/components/Layout";
 import TaskList from "@/components/TaskList";
-import TaskForm from "@/components/TaskForm";  // Import TaskForm component
+import TaskForm from "@/components/TaskForm";
 import { useState } from "react";
 
 const { Title } = Typography;
@@ -33,10 +33,8 @@ export default function Home() {
       <main style={{ justifyContent: "center", textAlign: 'center' }}>
         <Title>Tasks List</Title>
         
-        {/* Use TaskForm and pass the addTask function */}
         <TaskForm onAddTask={addTask} />
 
-        {/* Pass tasks as props to TaskList */}
         <TaskList tasks={tasks} setTasks={setTasks}/>
       </main>
     </LayoutComponent>

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Form, Input, Modal, Select, Space, Table } from 'antd';
-import type { TableProps } from 'antd';
+import React, { useState } from "react";
+import { Button, Form, Input, Modal, Select, Space, Table } from "antd";
+import type { TableProps } from "antd";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 
 interface DataType {
@@ -17,42 +17,40 @@ interface TaskListProps {
 }
 
 const TaskList: React.FC<TaskListProps> = ({ tasks, setTasks }) => {
-
   const [isEditing, setIsEditing] = useState(false);
-    const [editingTask, setEditingTask] = useState<DataType | null>(null);
-    const [form] = Form.useForm();
+  const [editingTask, setEditingTask] = useState<DataType | null>(null);
+  const [form] = Form.useForm();
 
-    const editTask = (task: DataType) => {
-      setIsEditing(true)
-      setEditingTask(task)
-      form.setFieldsValue({
-        task: task.task,
-        category: task.category,
-        priority: task.priority
-      })
-    }
+  const editTask = (task: DataType) => {
+    setIsEditing(true);
+    setEditingTask(task);
+    form.setFieldsValue({
+      task: task.task,
+      category: task.category,
+      priority: task.priority,
+    });
+  };
 
-    const saveEdit = () =>{
-      form.validateFields().then((values) => {
-        const updatedTasks = tasks.map((task) => 
-          task.key === editingTask?.key ? { ...task, ...values } : task
-        )
-        setTasks(updatedTasks)
-        setIsEditing(false)
-        setEditingTask(null)
-      })
-    }
+  const saveEdit = () => {
+    form.validateFields().then((values) => {
+      const updatedTasks = tasks.map((task) =>
+        task.key === editingTask?.key ? { ...task, ...values } : task
+      );
+      setTasks(updatedTasks);
+      setIsEditing(false);
+      setEditingTask(null);
+    });
+  };
   const deleteTask = (key: string) => {
-    const updatedTasks = tasks.filter(task => task.key !== key);
+    const updatedTasks = tasks.filter((task) => task.key !== key);
     setTasks(updatedTasks);
+  };
 
-  }
-
-  const columns: TableProps<DataType>['columns'] = [
+  const columns: TableProps<DataType>["columns"] = [
     {
-      title: 'Task',
-      dataIndex: 'task',
-      key: 'task',
+      title: "Task",
+      dataIndex: "task",
+      key: "task",
       render: (text) => <a>{text}</a>,
     },
     {
@@ -65,25 +63,31 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, setTasks }) => {
       dataIndex: "priority",
       key: "priority",
       render: (text: string) => (
-        <span style={{ color: text === 'High' ? 'red' : text === 'Normal' ? 'green' : 'blue' }}>
+        <span
+          style={{
+            color:
+              text === "High" ? "red" : text === "Normal" ? "green" : "blue",
+          }}
+        >
           {text}
         </span>
       ),
       filters: [
         {
-          text: 'High',
-          value: 'High',
+          text: "High",
+          value: "High",
         },
         {
-          text: 'Normal',
-          value: 'Normal',
+          text: "Normal",
+          value: "Normal",
         },
         {
-          text: 'Low',
-          value: 'Low',
+          text: "Low",
+          value: "Low",
         },
       ],
-      onFilter: (value: string, record: DataType) => record.priority.includes(value),
+      onFilter: (value: string, record: DataType) =>
+        record.priority.includes(value),
     },
     {
       title: "Date",
@@ -108,45 +112,57 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, setTasks }) => {
 
   return (
     <>
-   <>
-      <Table columns={columns} dataSource={tasks} rowKey="key" />
-      <Modal
-        title="Edit Task"
-        visible={isEditing}
-        onCancel={() => setIsEditing(false)}
-        onOk={saveEdit}
-        okText="Save"
-        cancelText="Cancel"
-      >
-        <Form form={form} layout="vertical">
-          <Form.Item label="Task" name="task" rules={[{ required: true, message: 'Please input the task!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Category" name="category" rules={[{ required: true, message: 'Please select a category!' }]}>
-            <Select>
-              <Select.Option value="Category 01">Category 01</Select.Option>
-              <Select.Option value="Category 02">Category 02</Select.Option>
-              <Select.Option value="Category 03">Category 03</Select.Option>
-            </Select>
-          </Form.Item>
-          <Form.Item label="Priority" name="priority" rules={[{ required: true, message: 'Please select a priority!' }]}>
-            <Select>
-              <Select.Option value="High">
-                <span style={{ color: 'red' }}>High</span>
-              </Select.Option>
-              <Select.Option value="Normal">
-                <span style={{ color: 'green' }}>Normal</span>
-              </Select.Option>
-              <Select.Option value="Low">
-                <span style={{ color: 'blue' }}>Low</span>
-              </Select.Option>
-            </Select>
-          </Form.Item>
-        </Form>
-      </Modal>
+      <>
+        <Table columns={columns} dataSource={tasks} rowKey="key" />
+        <Modal
+          title="Edit Task"
+          visible={isEditing}
+          onCancel={() => setIsEditing(false)}
+          onOk={saveEdit}
+          okText="Save"
+          cancelText="Cancel"
+        >
+          <Form form={form} layout="vertical">
+            <Form.Item
+              label="Task"
+              name="task"
+              rules={[{ required: true, message: "Please input the task!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Category"
+              name="category"
+              rules={[{ required: true, message: "Please select a category!" }]}
+            >
+              <Select>
+                <Select.Option value="Category 01">Category 01</Select.Option>
+                <Select.Option value="Category 02">Category 02</Select.Option>
+                <Select.Option value="Category 03">Category 03</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="Priority"
+              name="priority"
+              rules={[{ required: true, message: "Please select a priority!" }]}
+            >
+              <Select>
+                <Select.Option value="High">
+                  <span style={{ color: "red" }}>High</span>
+                </Select.Option>
+                <Select.Option value="Normal">
+                  <span style={{ color: "green" }}>Normal</span>
+                </Select.Option>
+                <Select.Option value="Low">
+                  <span style={{ color: "blue" }}>Low</span>
+                </Select.Option>
+              </Select>
+            </Form.Item>
+          </Form>
+        </Modal>
+      </>
     </>
-    </>
-)
+  );
 };
 
 export default TaskList;

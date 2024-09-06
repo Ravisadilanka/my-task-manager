@@ -24,7 +24,6 @@ const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
     const { task, category, priority, date } = values;
     const formattedDate = date.format('YYYY-MM-DD');
     
-    // Generate unique key for each task
     const newTask: Task = { 
       key: Date.now().toString(),
       task, 
@@ -33,7 +32,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onAddTask }) => {
       date: formattedDate 
     };
     
-    onAddTask(newTask);  // Pass new task to the parent component
+    onAddTask(newTask);
     message.success('Task added successfully!');
   };
 
